@@ -10,7 +10,7 @@
     const socket = io("https://rain-dodge-server.onrender.com");
   </script>
    <script>
-     const socket = io();
+     const socket = io("https://rain-dodge-server.onrender.com");
      const name = prompt('이름을 입력하세요:');
      socket.emit('join', { name });
 
