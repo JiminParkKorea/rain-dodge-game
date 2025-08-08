@@ -1,0 +1,28 @@
+// ===== CLIENT SIDE - MOBILE CONTROLLER (public/controller.html) =====
+ <!DOCTYPE html>
+ <html>
+ <head><title>Controller</title></head>
+ <body>
+   <button onclick="move('left')">⬅️</button>
+   <button onclick="move('right')">➡️</button>
+   <script src="/socket.io/socket.io.js"></script>
+   <script>
+     const socket = io();
+     const name = prompt('이름을 입력하세요:');
+     socket.emit('join', { name });
+
+     function move(dir) {
+       socket.emit('move', dir);
+     }
+
+     if (window.DeviceOrientationEvent) {
+       window.addEventListener('deviceorientation', (e) => {
+         const tiltX = e.gamma;  좌우 기울기
+         if (Math.abs(tiltX) > 5) {
+           socket.emit('tilt', tiltX);
+         }
+       });
+     }
+   </script>
+ </body>
+ </html>

@@ -1,0 +1,40 @@
+// ===== CLIENT SIDE - DISPLAY (public/index.html) =====
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <title>Rain Dodge</title>
+   <style>
+     canvas { background: #222; display: block; margin: 0 auto; }
+   </style>
+ </head>
+ <body>
+ <canvas id="game" width="800" height="600"></canvas>
+ <script src="/socket.io/socket.io.js"></script>
+ <script>
+   const socket = io();
+   const canvas = document.getElementById('game');
+   const ctx = canvas.getContext('2d');
+
+   socket.emit('start');
+
+   socket.on('state', ({ players, raindrops }) => {
+     ctx.clearRect(0, 0, 800, 600);
+
+     for (let id in players) {
+       const p = players[id];
+       ctx.fillStyle = p.alive ? 'cyan' : 'gray';
+       ctx.fillRect(p.x, 550, 50, 50);
+     }
+
+     for (let r of raindrops) {
+       ctx.fillStyle = 'blue';
+       ctx.fillRect(r.x, r.y, 5, 20);
+     }
+   });
+
+   socket.on('gameover', (time) => {
+     alert(`게임 종료! 생존 시간: ${Math.floor(time / 1000)}초`);
+   });
+ </script>
+ </body>
+ </html>
